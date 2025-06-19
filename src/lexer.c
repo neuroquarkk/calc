@@ -68,8 +68,8 @@ static char *read_number(Lexer_t *lexer) {
     int has_decimal = 0;
 
     // Read consecutive digits
-    while (lexer->curr_char != '\0' && is_digit(lexer->curr_char) ||
-           lexer->curr_char == '.' && !has_decimal) {
+    while ((lexer->curr_char != '\0' && is_digit(lexer->curr_char)) ||
+           (lexer->curr_char == '.' && !has_decimal)) {
 
         if (lexer->curr_char == '.') {
             has_decimal = 1;
@@ -147,7 +147,8 @@ Token_t *lexer_next_token(Lexer_t *lexer) {
             }
         }
 
-        if (lexer->curr_char == '.' && lexer->pos + 1 < lexer->length && is_digit(lexer->input[lexer->pos + 1])) {
+        if (lexer->curr_char == '.' && lexer->pos + 1 < lexer->length &&
+            is_digit(lexer->input[lexer->pos + 1])) {
             char *number = read_number(lexer);
             if (number) {
                 return create_token(TOKEN_NUMBER, number);
