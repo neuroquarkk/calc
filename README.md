@@ -2,6 +2,11 @@
 A complete arithmetic expression compiler build in C that lexically analyzes, parses and evaluates mathematical expressions with proper operator precedence and associativity.
 
 ## Features
+- **Supported Number Types:**
+    - **Integer number:** `123`, `0`, 42
+    - **Decimal numbers:** `3.14`, `0.5`
+    - **Leading decimal:** `.5`, `.123`
+
 - **Supported Operations**
     - **Arithmetic operators:** `+`, `-`, `*`, `/`, `^`(power)
     - **Parantheses:** `(`, `)` for grouping expressions

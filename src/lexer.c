@@ -65,11 +65,24 @@ static void skip_whitespace(Lexer_t *lexer) {
 static char *read_number(Lexer_t *lexer) {
     int start_pos = lexer->pos;
     int length = 0;
+    int has_decimal = 0;
 
     // Read consecutive digits
-    while (lexer->curr_char != '\0' && is_digit(lexer->curr_char)) {
+    while (lexer->curr_char != '\0' && is_digit(lexer->curr_char) ||
+           lexer->curr_char == '.' && !has_decimal) {
+
+        if (lexer->curr_char == '.') {
+            has_decimal = 1;
+        }
+
         advance(lexer);
         length++;
+    }
+
+    if (length == 1 && has_decimal) {
+        lexer->pos = start_pos;
+        lexer->curr_char = lexer->input[lexer->pos];
+        return NULL;
     }
 
     // Allocate memory for the number string
@@ -126,7 +139,19 @@ Token_t *lexer_next_token(Lexer_t *lexer) {
         // Handle numbers
         if (is_digit(lexer->curr_char)) {
             char *number = read_number(lexer);
-            return create_token(TOKEN_NUMBER, number);
+            if (number) {
+                return create_token(TOKEN_NUMBER, number);
+            } else {
+                lexer_error(lexer, "Invalid number format");
+                return create_single_char_token(TOKEN_ERROR, lexer->curr_char);
+            }
+        }
+
+        if (lexer->curr_char == '.' && lexer->pos + 1 < lexer->length && is_digit(lexer->input[lexer->pos + 1])) {
+            char *number = read_number(lexer);
+            if (number) {
+                return create_token(TOKEN_NUMBER, number);
+            }
         }
 
         // Handle single character operation

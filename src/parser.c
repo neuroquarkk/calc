@@ -53,7 +53,7 @@ static void eat(Parser_t *parser, TokenType expected) {
         token_free(parser->curr_token);
         parser->curr_token = lexer_next_token(parser->lexer);
     } else {
-        fprintf(stderr, "Paser Error: Expected token type %s, get %s\n",
+        fprintf(stderr, "Parser Error: Expected token type %s, get %s\n",
                 token_type_to_string(expected),
                 token_type_to_string(parser->curr_token->type));
         exit(1);
@@ -227,7 +227,7 @@ double ast_eval(ASTNode_t *node) {
         case TOKEN_DIVIDE:
             if (right_val == 0.0) {
                 fprintf(stderr, "Error: Division by zero\n");
-                return 0;
+                return 0.0;
             }
             return left_val / right_val;
         case TOKEN_POWER:
@@ -269,7 +269,7 @@ void ast_print(ASTNode_t *node, int indent) {
 
     switch (node->type) {
     case AST_NUMBER:
-        printf("NUMBER: %0.2f\n", node->data.number);
+        printf("NUMBER: %.6f\n", node->data.number);
         break;
 
     case AST_BINARY_OP:
@@ -279,7 +279,7 @@ void ast_print(ASTNode_t *node, int indent) {
         break;
 
     case AST_UNARY_OP:
-        printf("UNARY OP: %s\n", token_type_to_string(node->data.unary_op.op));
+        printf("UNARY_OP: %s\n", token_type_to_string(node->data.unary_op.op));
         ast_print(node->data.unary_op.operand, indent + 1);
         break;
     }
