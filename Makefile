@@ -17,7 +17,7 @@ TARGET = $(BIN_DIR)/$(PROJECT)
 all: release
 
 release: CFLAGS = $(RELEASE_FLAGS)
-release: prep $(TARGET)
+release: .prep $(TARGET)
 
 debug: CFLAGS = $(DEBUG_FLAGS)
 debug: .prep $(TARGET)
